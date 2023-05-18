@@ -1,0 +1,76 @@
+@import"https://fonts.googleapis.com/css2?family=Amaranth&family=Crete+Round&family=Hammersmith+One&display=swap";
+@import"https://fonts.googleapis.com/css2?family=Amaranth&family=Crete+Round&family=Hammersmith+One&family=Righteous&display=swap";
+@import"https://fonts.googleapis.com/css2?family=Amaranth&family=Concert+One&family=Crete+Round&family=Hammersmith+One&family=Righteous&display=swap";
+@import"https://fonts.googleapis.com/css2?family=Amaranth&family=Concert+One&family=Crete+Round&family=Hammersmith+One&family=Nunito:wght@700&family=Righteous&display=swap";
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+/* "Righteous",
+Times New Roman,
+ Arial,
+"Crete Round",
+"Concert One",
+"Nunito", */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+  
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+
+
+
+      }
+      ::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+.header-details{
+    height: 3vh;
+}
+.navbar{
+    height: 7vh;
+}
+.navbar-logo span{
+    font-family:Nunito;
+    font-size:1.4rem;
+}
+.header-details img{
+    width: 10px;
+    margin-top: 2px;
+}
+
+.header-details span{
+    font-size: 10px;
+
+ 
+
+}
+span{
+    padding-bottom: 2px;
+    
+}
+.mask{
+
+    background-color:#334a8bd0;
+
+    
+    
+}
+.myf-custome6-font{
+    font-family: Nunito;
+
+}
+
+
+

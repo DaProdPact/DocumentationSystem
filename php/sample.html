@@ -1,0 +1,218 @@
+<div class="row bg-white" style="height: 20vh; background-image:url(../img/header_progresschart.jpg); background-repeat:no-repeat; background-size: 1150px 20vh; height:20vh;">
+  <div class="text-center" style="width:45%; margin-left:3rem; margin-top:4rem;">
+  <h1 class="fw-bold"><span><?=$_SESSION['qualiname']; ?></span></h1>
+  </div>
+    </div>
+    
+    
+    
+    <div class="row bg-white" style="height: 50vh;">
+    
+    <table class="table border-dark table-bordered">
+                  <thead style="background-color:#D9D9D9;" class="border-dark">
+                  <tr class="border-dark" style="height: 15px; font-size:8px" >
+                      <th class="p-0 text-center py-1" rowspan="3" style="width:5%; font-size:8px;">TRAINEES NAME</th>
+                      <th class="p-0 text-center py-1" colspan="36" style="width:18%; font-size:8px;">COMMON COMPONENTS</th>
+     
+  
+                      </tr>
+  
+                      <tr class="border-dark" style="height: 11px; font-size:8px">
+                      <?php
+                      function numberToRomanbasic(int $number) {
+                      $map = ['M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1];
+                      $returnValue = '';
+                      while ($number > 0) {
+                          foreach ($map as $roman => $int) {
+                              if($number >= $int) {
+                                  $number -= $int;
+                                  $returnValue .= $roman;
+                                  break;
+                              }
+                          }
+                      }
+                      return $returnValue;
+                  }
+  
+  
+                     
+                  $selectquery = "SELECT * FROM `lmar_unit_competencies` WHERE lmar_unit_comp = '$basiccompentencies' ";
+                  $selectsql = mysqli_query($connection,$selectquery);
+                  $mainloops = 1;
+                  while($row = mysqli_fetch_array($selectsql)){ 
+  
+                    $unitid = $row['lmar_unit_id'];
+                    $counts = $row['lmar_unit_count'] + 1;
+                    ?>
+                      <th class="p-0 text-center" colspan="<?=$counts?>" style="width:3%;"><?=numberToRomanbasic($mainloops)?></th>
+                      <?php 
+                      $mainloops++;
+                    } ?>
+                </tr>
+          
+  
+  
+  
+                 <tr class="border-dark text-center" style="height: 11px; font-size:8px">
+                <?php 
+               
+                  $loopelement = 1;
+                  $countquery = "SELECT * FROM `lmar_unit_competencies` WHERE lmar_unit_comp = '$basiccompentencies' ";
+                  $countsql = mysqli_query($connection,$countquery);
+                  while($crow = mysqli_fetch_array($countsql)){ 
+                    $unitcount = $crow['lmar_unit_count'];
+                    $loopcheck = 1;
+                    while($loopcheck <= $unitcount){
+                    ?>
+        
+                    <th class="p-0 fw-bold" style="background-color:#2f9cf0;"><?=$loopcheck?></th>
+  
+                    <?php 
+                    $loopcheck++;
+                   } ?>
+                   <th class="p-0 fw-bold">C</th>
+                   <?php
+                   $loopcheck = 1;
+                   } ?>
+            
+  
+                </tr>
+  
+                  </thead>
+                  <tbody>
+  
+           <?php
+           
+           $readquery = "SELECT * FROM `attendance` LEFT JOIN lmar_basic ON  attendance.attendance_id = lmar_basic.lmar_basic_attendance_id LEFT JOIN lmar_basic_extend ON attendance.attendance_id =  lmar_basic_extend.lmar_basic_ex_attendance_id WHERE import_trainer_id = '$session_id' AND import_qualification_id = '$sessionqualification' AND  import_batch = '$session_batch'"; 
+           $readsql = mysqli_query($connection,$readquery);
+  
+              $loop = 1;
+              while($row = mysqli_fetch_assoc($readsql)){
+  
+  
+                  echo '<tr class="border-dark text-center" style="height: 11px; font-size:8px">';
+                  echo '<td class="p-0 text-start ps-1">'.$loop.".) ".$row['FirstName']." ".$row['LastName'].'</td>';
+  
+                  $loopelement = 1;
+                  $loopunit = 1;
+  
+                  $getquery = "SELECT * FROM `lmar_unit_competencies` WHERE lmar_unit_comp = '$basiccompentencies' ";
+                  $getsql = mysqli_query($connection,$getquery);
+                  while($grow = mysqli_fetch_array($getsql)){ 
+                    $getunitcount = $grow['lmar_unit_count'];
+                    $getloopcheck = 1;
+                    $finals = '';
+  
+                    while($getloopcheck <= $getunitcount){ ?>
+         
+                      <td class="p-0" style="background-color:#2f9cf0;"><?= $row["lmar_basic$loopunit".'_'."$getloopcheck"]; ?></td>  
+                 
+                 <?php         
+                  if($row["lmar_basic$loopunit".'_'."$getloopcheck"] != '/'){
+                   
+                  }
+                  else{
+                    $finals = '/';
+                  }  
+                 $getloopcheck++;
+                 } 
+                 echo '<td class="p-0">'.$finals.'</td>';
+                 $getloopcheck = 1;
+                 $loopunit++;
+                 
+                 }
+                 $loop++;
+                  }?>
+  
+  
+                
+  
+  
+  
+  
+                  
+                  </tbody>
+              </table>
+    </div>
+  
+    <div class="row pt-1" style="height: 13vh; background-color:#bfc1c3;">
+  
+    <?php 
+            function basicnumber(int $number) {
+              $map = ['M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1];
+              $returnValue = '';
+              while ($number > 0) {
+                  foreach ($map as $roman => $int) {
+                      if($number >= $int) {
+                          $number -= $int;
+                          $returnValue .= $roman;
+                          break;
+                      }
+                  }
+              }
+              return $returnValue;
+          }
+            $loopcheck = '1';
+            $loopelement = '1';
+            $selectquery = "SELECT * FROM `lmar_unit_competencies`  WHERE lmar_unit_comp = '$basiccompentencies' ";
+            $selectsql = mysqli_query($connection,$selectquery);
+            while($row = mysqli_fetch_array($selectsql)){ 
+              $unitid = $row['lmar_unit_id']
+              ?>
+  
+  <div class="" style="width: 20%;">
+      <div class="row">
+      <p class="m-0 fw-bold" style="font-size:6px;"><?=basicnumber($loopcheck)?> <?= $row['lmar_unit_name']; ?></p>
+              <?php 
+            $elementquery = "SELECT * FROM `lmar_element` WHERE lmar_element_unit = '$unitid' ";
+            $elementsql = mysqli_query($connection,$elementquery);
+            while($crow = mysqli_fetch_array($elementsql)){ ?>
+            <p class="m-0" style="font-size:6px;"><?= $crow['lmar_element_name']; ?></p>
+              
+            <?php
+            $loopelement++;
+           } ?>
+          
+          
+          <?php $loopcheck++;  ?>
+           </div>
+  
+           </div> 
+          <?php }
+  
+           
+            ?>
+    
+    </div>
+  
+  
+  
+    <div class="row bg-white" style="height: 20vh; background-image:url(../img/footerprogresschart.jpg); background-repeat:no-repeat; background-size: 1150px 18vh; height:18vh;">
+    <div class="col-6">
+      <div class="row " style="height:5vh;">
+        <span class="text-white ps-5 fw-bold pt-4" style="font-size:9px; line-height:0.6rem;">Provider of Highly Skilled Electricians in Central Luzon</span>
+      </div>
+      <div class="row" style="height:5vh;">
+        <span class="text-white ps-5 fw-bold pt-3" style="font-size:9px; line-height:0.6rem;">To Create a Passion for Learning and Promote Innovation</span>
+      </div>
+  
+        <div class="row height:7vh;">
+        <span class="text-white pt-3 fw-bold" style="font-size:9px; line-height:0.8rem;">
+        <ul>
+          <li>Industry-relevant training programs</li>
+          <li>Graduate with quality skills and positive work values; and</li>
+          <li>Strategies collaborations with public and private sector</li>
+        </ul>
+        </span>
+        </div>
+    </div>
+    <div class="col-6 mt-4 ps-5 pt-2">
+    <span class="text-white mt-3 fw-bold" style="font-size:13px;">
+        <ul>
+          <li>Industry-relevant training programs</li>
+          <li>Graduate with quality skills and positive work values; and</li>
+          <li>Strategies collaborations with public and private sector</li>
+        </ul>
+        </span>
+    </div>
+    </div>

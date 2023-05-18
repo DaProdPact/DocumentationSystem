@@ -1,0 +1,642 @@
+<?php 
+require('./database.php');
+
+session_start();
+if($_SESSION['status'] == 'invalid' || empty($_SESSION['status'])){
+  echo '<script type="text/javascript">';
+  echo 'window.location.href="http://localhost/DocumentationSystem/index.php";';
+  echo '</script>';
+}
+  
+$session_id = $_SESSION['id'];
+$session_batch =  $_SESSION['batch'];
+$sessionqualification = $_SESSION['choosecourse'];
+
+date_default_timezone_set('Asia/Manila'); 
+  
+$date1ss = new DateTime("now");
+$day = date('j');
+$month = date('F');
+$year = date('Y');
+
+
+$session_col = $_SESSION['col'];
+
+
+$stmt1 = " SELECT COUNT(lmar_unit_id) as total FROM `lmar_unit_competencies`  WHERE lmar_unit_comp  = '2' AND lmar_unit_qualification = '$sessionqualification' ";
+$result1 = mysqli_query($connection, $stmt1);
+
+if(mysqli_num_rows($result1) > 0){
+   $row = mysqli_fetch_assoc($result1);
+   $total = $row["total"];
+   $totaltimes = $total*3;
+   $_SESSION['common'] = $totaltimes;
+
+  
+}
+
+$stmt2 = " SELECT COUNT(lmar_unit_id) as total FROM `lmar_unit_competencies`  WHERE lmar_unit_comp  = '3' AND lmar_unit_qualification = '$sessionqualification' ";
+$result2 = mysqli_query($connection, $stmt2);
+
+if(mysqli_num_rows($result2) > 0){
+   $row = mysqli_fetch_assoc($result2);
+   $total2 = $row["total"];
+   $totaltimes2 = $total2*3;
+   $_SESSION['core'] = $totaltimes2;
+}
+
+
+
+
+
+
+
+$qualiquery = "SELECT * FROM trainer_qualification WHERE qualification_id = '$sessionqualification' ";
+$qualisql = mysqli_query($connection,$qualiquery);  
+while($qrow = mysqli_fetch_array($qualisql)){
+  $_SESSION['qualiname'] = $qrow['qualification_title'];
+  $_SESSION['qualicode'] = $qrow['qualification_code'];
+
+}
+
+
+
+
+
+// $declarationcount = 25;
+
+
+require('../link/header.html');
+?>
+
+<link rel="stylesheet" href="../css/tipattendance.css">
+
+    <link rel="icon" href="../img/tesdalogo.png" type="image/x-icon">
+ 
+
+    <style>
+
+
+      ::-webkit-scrollbar {
+    display: none;
+    }
+    
+    @page { 
+        size: A4 landscape;
+      
+     }
+     
+
+     #navbar{
+      position: absolute;
+      top: 0;
+      width: 100%;
+
+
+      
+    }
+
+
+       
+    @media print {
+        body * {
+          visibility: hidden;
+
+        }
+        #printlmar, #printlmar * {
+          visibility: visible;
+
+
+
+        }
+        #lmarprintbtn, #lmarprintbtn * {
+          visibility: hidden;
+
+
+
+        }
+        
+
+
+
+      } 
+
+    #btns{
+      position: absolute;
+
+      top: 0;
+      right: 20px;
+      margin-top: 2rem;
+      width: 30rem;
+
+      
+    }
+
+    tr{
+        height: 9px;
+    }
+
+
+
+    </style>
+
+
+
+    </head>
+<body>
+
+<div class="row" class="" id="printlmar" height="100vh">
+
+<div class="" style="background-image: url('../img/progresscchart.png'); background-repeat: no-repeat; background-size: 1285px 890px; height:900px; margin-right: 5rem; border:3px solid blue;">
+
+<div class="row" style="height: 70px; width:1250px;">
+
+
+
+</div>
+
+<div class="row mx-4" style="height: 120px; width:1250px;">
+<div class="col-12 d-flex justify-content-center"> 
+  <p class="fw-bold mt-3 p-0 text-danger" style="font-size:2rem;">Electrical Installation and Maintenance NC II</p>
+
+
+
+
+</div>
+<!-- <div class="col-3">
+</div> -->
+
+
+</div>
+
+
+<?php 
+
+ $trix = 1;
+ $cols = $session_col;
+ ?>
+
+<div class="row" style="padding:0rem 2.5rem; height:530px;">
+        
+<table class="table mt-2 border-dark table-bordered ms-1" id="table">
+            <thead class="border-dark">
+            <tr class="border-dark" style="height: 14px; font-size:10px" >
+                <th class="p-0 text-center" rowspan="3" colspan="1" style="font-size:13px; width:10%;">TRAINEES NAME</th>
+                <th class="p-0 text-center" rowspan="1" colspan="27" style="width:30%; font-size:13px;">BASIC COMPETENCIES</th>            
+                <th class="p-0 text-center" rowspan="1" colspan="<?= $_SESSION['common']; ?>" style="width:20%; font-size:13px;">COMMON</th>
+                <th class="p-0 text-center" rowspan="1" colspan="<?= $_SESSION['core']; ?>" style="width:20%; font-size:13px;">CORE</th>
+
+              </tr>
+              <tr class="border-dark" style="height: 14px; font-size:10px" >
+                <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">Participate in workplace communication</th>
+                <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">Work in team environment</th>            
+                <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">Solve/address general workplace problems</th>
+                <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">Develop career and life decisions</th>
+                <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">Contribute to workplace innovation</th>            
+                <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">Present relevant information </th>
+                <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">Practice occupational safety and health policies and procedures</th>
+
+                <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">Exercise efficient and effective sustainable practices in the workplace</th>            
+                <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">Practice entrepreneurial skills in the workplace</th>
+               
+
+
+                <!-- <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">BASIC COMPETENCIES</th>            
+                <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">COMMON</th>
+                <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">CORE</th>
+                <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;">BASIC COMPETENCIES</th>     -->
+                
+                <?php
+                $elemcol = "SELECT * FROM `lmar_unit_competencies` WHERE lmar_unit_comp = '2' AND lmar_unit_qualification = '$sessionqualification' ";
+                $elemcolsql = mysqli_query($connection,$elemcol);  
+                while($erow = mysqli_fetch_array($elemcolsql)){ ?>
+                    <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;"> <?= $erow['lmar_unit_name'] ?></th>     
+                <?php } ?>
+
+
+                <?php
+                $elemcol = "SELECT * FROM `lmar_unit_competencies` WHERE lmar_unit_comp = '3' AND lmar_unit_qualification = '$sessionqualification' ";
+                $elemcolsql = mysqli_query($connection,$elemcol);  
+                while($erow = mysqli_fetch_array($elemcolsql)){ ?>
+                    <th class="p-0 text-center" rowspan="1" colspan="3" style="width:5%; font-size:8px;"> <?= $erow['lmar_unit_name'] ?></th>     
+                <?php } ?>
+
+
+
+
+              </tr>
+              <tr class="border-dark" style="height: 14px; font-size:10px">
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">2</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">3</th>            
+
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">2</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">3</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">2</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">3</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">2</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">3</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">2</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">3</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">2</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">3</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>     
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>            
+              <th class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;">1</th>
+            
+             
+                
+
+
+
+              </tr>
+
+
+  
+
+                
+
+            </thead>
+            <tbody class="border-dark">
+            <?php 
+              $loops = 1;
+
+
+              $printdetails_query = "SELECT * FROM attendance  WHERE import_trainer_id = '$session_id ' AND import_qualification_id = '$sessionqualification' AND  import_batch = '$session_batch'" ;
+              $printdetails_sql = mysqli_query($connection,$printdetails_query);  
+              
+  
+              while($traineesrow = mysqli_fetch_array($printdetails_sql)){
+         ?>
+              <tr class="border-dark" style="height: 14px; font-size:10px">
+              <td class="p-0 ps-1 " rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"><?php echo $loops." .)  ".$traineesrow['FirstName']." ".$traineesrow['LastName']; ?></td>            
+
+              <td class="p-0 text-center td1<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td2<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td3<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center t4<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center t5<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center t6<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>     
+              <td class="p-0 text-center t7<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center t8<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center t9<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>     
+              <td class="p-0 text-center t10<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center t11<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td12<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>     
+              <td class="p-0 text-center td13<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td14<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td15<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>     
+              <td class="p-0 text-center td16<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td17<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td18<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>     
+              <td class="p-0 text-center td19<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td20<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td21<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>     
+              <td class="p-0 text-center td22<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td23<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td24<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>     
+              <td class="p-0 text-center td25<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td26<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>            
+              <td class="p-0 text-center td27<?= $traineesrow['attendance_id']?>" rowspan="1" colspan="1" id="<?= $traineesrow['attendance_id'] ?>" style="font-size:10px;"></td>     
+
+              <?php
+              $commoncol = $_SESSION['common'];
+              $commoncoladd = 0;
+              while ($commoncoladd < $commoncol){ ?>
+              <td class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;"></td>     
+        
+              <?php        
+              $commoncoladd++;
+             }
+              ?>
+
+            <?php
+            $corecol = $_SESSION['core'];
+            $corecoladd = 0;
+            while ($corecoladd < $corecol)
+            {
+                ?>
+            <td class="p-0 text-center" rowspan="1" colspan="1" style="font-size:10px;"></td>     
+    
+            <?php        
+            $corecoladd++;
+            }
+              ?>
+                    
+            
+
+
+
+
+             
+              <?php 
+             $loops++;
+             } ?>
+            
+             
+                
+
+
+
+              </tr>
+
+              
+            
+            </tbody>
+        </table>
+
+
+        
+</div>
+
+<div class="row ms-4 mt-2" style="height: 73px; width:1250px;">
+
+
+
+
+  
+
+</div>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+<div class="row gap-0" id="btns">
+      <div class="col-6">     
+
+         </div>
+                    <div class="col-4 d-flex justify-content-center px-4">  
+                      <button class="btn text-white" style="background-color: #334a8bd0;" id="lmarprintbtn"><i class="fa fa-print" aria-hidden="true"></i> &nbsp&nbspPrint &nbsp&nbsp</button></div>
+                    <div class="col-2">
+                       <button class="btn text-white" style="background-color: #334a8bd0;" id="lmarnavbtn"><i class="fas fa-bars" aria-hidden="true"></i> </button></div>
+  
+
+
+    </div>
+
+
+
+
+
+  <div class="row d-none" id="navbar" style="height:100vh;">
+    <div class="col-2 pe-0">
+    <?php 
+    require('../link/navbar.html');
+  ?>
+</div>
+ 
+
+   
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+          </div>
+        </div>
+
+
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    
+
+
+
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+    <div class="modal-content" id="update_detail">
+    </div>
+    </div>
+
+</div>
+
+<div
+          class="modal fade"
+          id="logoutModal"
+          tabindex="-1"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header bg-primary bg-opacity-75">
+                
+                <h5 class="modal-title text-white" id="exampleModalLabel">
+                  Logout
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-mdb-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-2 offset-1">
+                  <i class="fas fa-sign-out-alt text-primary" style="font-size: 50px;"></i>
+                  </div>
+                  <div class="col-8">
+                    <p>Are you sure want to logout?</p>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-mdb-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="button" class="btn btn-primary" id="logouts">
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+      <div class="mb-2 position-absolute position-fixed end-0 bottom-0 me-1">
+        <div class="toast success">
+          <div class="toast-header bg-primary bg-opacity-75">
+          <strong class="me-auto text-primary text-primary-75"><i class="fas fa-key"></i>Update Details</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body bg-primary bg-opacity-50">
+          <p class="text-white">Update Successfully</p>
+        </div>
+      </div>
+    </div>
+
+  
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   
+    <script src="../javascript/progresschart.js"></script>
+    <script>
+    
+    </script>
+
+
+    <script>
+        document.querySelectorAll('.form-outline').forEach((formOutline) => {
+      new mdb.Input(formOutline).init();
+    });
+
+
+    // var table = document.getElementById('table');
+    // var cells = table.getElementsByTagName('td');
+    // var thcelss = table.getElementsByTagName('th');
+    // var sheesh = table.getElementsByTagClass('sheesh');
+
+    
+
+    // console.log(cells)
+
+    // for (var i = 0; i < cells.length; i++){
+    //   cells[i].onclick = function () {
+    //     console.log('click')
+    //     var input = document.createElement('input');
+    //     input.setAttribute('type', 'text');
+    //     input.value = this.innerHTML;
+    //     // input.style.width = this.offsetWidth - (this.clientLeft * 2) +  "px";
+    //     // input.style.height = this.offsetHeight - (this.clientTop * 2) +  "px";
+    //     input.style.border = "0px";
+    //     input.style.fontFamily = "inherit";
+    //     input.style.fontSize = "inherit";
+    //     input.style.textAlign = "inherit";
+    //     // input.style.backgroundColor = "LightGoldenRodYellow";
+
+
+    //     this.innerHTML = '';
+    //     this.style.cssText = 'padding:0px 0px';
+    //     this.append(input);
+    //     this.firstElementChild.select();
+
+
+        
+    //   }
+    // }
+    // for (var i = 0; i < thcelss.length; i++){
+    //   thcelss[i].onclick = function () {
+    //     console.log('click')
+    //     var input = document.createElement('input');
+    //     input.setAttribute('type', 'text');
+    //     input.value = this.innerHTML;
+    //     // input.style.width = this.offsetWidth  - (this.clientLeft * 1) +  "px";
+    //     // input.style.height = this.offsetHeight - (this.clientTop * 1) +  "px";
+    //     input.style.border = "0px";
+    //     input.style.fontFamily = "inherit";
+    //     input.style.fontSize = "inherit";
+    //     input.style.textAlign = "left";
+    //     // input.style.backgroundColor = "LightGoldenRodYellow";
+    //     input.style.width = '100px';
+
+    //     this.innerHTML = '';
+    //     this.style.cssText = 'padding:0px 0px';
+    //     this.append(input);
+    //     this.firstElementChild.select();
+
+
+        
+    //   }
+    // }
+
+    // for (var i = 0; i < sheesh.length; i++){
+    //   sheesh[i].onclick = function () {
+    //     console.log('click')
+    //     var input = document.createElement('input');
+    //     input.setAttribute('type', 'text');
+    //     input.value = this.innerHTML;
+    //     // input.style.width = this.offsetWidth  - (this.clientLeft * 1) +  "px";
+    //     // input.style.height = this.offsetHeight - (this.clientTop * 1) +  "px";
+    //     input.style.border = "0px";
+    //     input.style.fontFamily = "inherit";
+    //     input.style.fontSize = "inherit";
+    //     input.style.textAlign = "left";
+    //     // input.style.backgroundColor = "LightGoldenRodYellow";
+    //     input.style.width = '100px';
+
+    //     this.innerHTML = '';
+    //     this.style.cssText = 'padding:0px 0px';
+    //     this.append(input);
+    //     this.firstElementChild.select();
+
+
+        
+    //   }
+    // }
+    
+
+
+
+
+    console.log('sheesh')
+    </script>
+
+    
+    </body>
+</html>
